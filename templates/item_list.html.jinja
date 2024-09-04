@@ -1,0 +1,8 @@
+<ul class="bg-base-200 rounded-box">
+    <h3 class="text-xl">Items</h3>
+    {% for i in item_list %}
+    <li>{{ i }}
+        <button class="btn" hx-action="click" hx-delete="item/{{loop.index}}" hx-target="#item-list">delete</button>
+    </li>
+    {% endfor %}
+</ul>

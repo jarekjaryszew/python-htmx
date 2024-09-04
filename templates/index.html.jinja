@@ -24,30 +24,30 @@
     </div>
 
     <aside class="fixed top-19 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0">
-    <div class=" w-56">
+        <div class=" w-56">
 
-        <ul class="menu bg-base-200 rounded-box ">
-            <li><a hx-trigger="click" hx-get="/home" hx-target="#content-container" hx-swap="innerHTML">Home</a>
-            </li>
-            <li><a hx-trigger="click" hx-get="/secured_home" hx-target="#content-container"
-                    hx-swap="innerHTML">Protected
-                    home</a></li>
-        </ul>
-        <hr>
-        <ul class="menu bg-base-200 rounded-box">
-            <h3 class="text-xl">Template examples</h3>
-            <li><a>Element Swap</a></li>
-            <li><a>Form</a></li>
-            <li><a>Paging</a></li>
-            <li><a>Placeholder</a></li>
-        </ul>
-        <hr>
-        <ul class="menu bg-base-200 rounded-box">
-            <h3 class="text-xl">FastHTML examples</h3>
-            <li><a>Dynamic rendering</a></li>
-            <li><a>Embedding</a></li>
-        </ul>
-    </div>
+            <ul class="menu bg-base-200 rounded-box ">
+                <li><a hx-trigger="click" hx-get="/home" hx-target="#content-container" hx-swap="innerHTML">Home</a>
+                </li>
+                <li><a hx-trigger="click" hx-get="/secured_home" hx-target="#content-container"
+                        hx-swap="innerHTML">Protected
+                        home</a></li>
+            </ul>
+            <hr>
+            <ul class="menu bg-base-200 rounded-box">
+                <h3 class="text-xl">Template examples</h3>
+                <li><a hx-trigger="click" hx-get="/list" hx-target="#content-container" hx-swap="innerHTML">Dynamic
+                        List</a></li>
+                <li><a>Paging</a></li>
+                <li><a>Placeholder</a></li>
+            </ul>
+            <hr>
+            <ul class="menu bg-base-200 rounded-box">
+                <h3 class="text-xl">FastHTML examples</h3>
+                <li><a>Dynamic rendering</a></li>
+                <li><a>Embedding</a></li>
+            </ul>
+        </div>
     </aside>
     {# Main content #}
     <div class="container mx-auto top-10" id="content-container">
