@@ -1,0 +1,58 @@
+<html>
+
+<head>
+    <link href="static/daisyui.full.min.css" rel="stylesheet" type="text/css" />
+    <script src="static/tailwind.full.min.js"></script>
+    <script src="static/htmx.min.js"></script>
+
+    <title>HTMX prez</title>
+</head>
+
+<body>
+    {# Top bar #}
+    <div class="navbar bg-base-200 text-neutral-content">
+        {% if current_user is not none %}
+
+        Hello, {{ current_user }}
+        <form class="absolute top-2 right-5" action="/logout" method="post">
+            <button class="btn btn-primary">Logout</button>
+        </form>
+        {% else %}
+        Unknown user
+        <a href="/login"><button class="btn btn-primary absolute top-2 right-5">Login</button></a>
+        {% endif %}
+    </div>
+
+    <aside class="fixed top-19 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0">
+    <div class=" w-56">
+
+        <ul class="menu bg-base-200 rounded-box ">
+            <li><a hx-trigger="click" hx-get="/home" hx-target="#content-container" hx-swap="innerHTML">Home</a>
+            </li>
+            <li><a hx-trigger="click" hx-get="/secured_home" hx-target="#content-container"
+                    hx-swap="innerHTML">Protected
+                    home</a></li>
+        </ul>
+        <hr>
+        <ul class="menu bg-base-200 rounded-box">
+            <h3 class="text-xl">Template examples</h3>
+            <li><a>Element Swap</a></li>
+            <li><a>Form</a></li>
+            <li><a>Paging</a></li>
+            <li><a>Placeholder</a></li>
+        </ul>
+        <hr>
+        <ul class="menu bg-base-200 rounded-box">
+            <h3 class="text-xl">FastHTML examples</h3>
+            <li><a>Dynamic rendering</a></li>
+            <li><a>Embedding</a></li>
+        </ul>
+    </div>
+    </aside>
+    {# Main content #}
+    <div class="container mx-auto top-10" id="content-container">
+        {% include "home.html.jinja" %}
+    </div>
+</body>
+
+</html>

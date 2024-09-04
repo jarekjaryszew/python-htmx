@@ -1,0 +1,12 @@
+<div class="flex justify-center">
+    <div class="w-1/2">
+        <h1 class="text-2xl">Welcome to the Python and HTMX presentation</h1>
+        <form hx-get="/echo" hx-target="#echoed">
+            <input type="text" name="shout" id="name" class="input input-bordered" placeholder="Shout">
+            <button type="submit" class="btn btn-primary">Shout</button>
+        </form>
+        <div id="echoed" class="text-xl">
+            <!-- This is where the echoed text will appear -->
+        </div>
+    </div>
+</div>
