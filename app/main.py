@@ -27,7 +27,8 @@ class RequiresLoginException(Exception):
 
 
 async def loggedInCookieRequired(request: Request):
-    if request.cookies.get("LoggedIn") is None:
+    global current_user
+    if request.cookies.get("LoggedIn") is None or current_user is None:
         # We need to throw an exception to trigger the exception handler
         # if we want to change the response in FastAPI
         raise RequiresLoginException()
@@ -116,11 +117,10 @@ async def delete_item(request: Request, item_id: int, dependencies=Depends(logge
     )
 
 
-# Paging example
-# List example
+# Paging example with delay
 @app.get("/paging", response_class=templates.TemplateResponse)
 async def list(request: Request):
-    item_list = [f"Item {i}" for i in range(10, 21)]
+    item_list = [f"Item {i}" for i in range(1, 11)]
     return templates.TemplateResponse(
         request=request, name="paging.html.jinja", context={"item_list": item_list}
     )
