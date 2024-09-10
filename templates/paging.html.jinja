@@ -1,0 +1,23 @@
+<div class="flex justify-center"></div>
+<div class=" w-1/2 bg-base-200 rounded-box px-10">
+
+    <div id="loading" class='htmx-indicator modal'>
+        <p>loading...</p>
+    </div>
+    <div id="item-list">
+        {% include "page.html.jinja" %}
+    </div>
+
+    <div class="join">
+        <input class="join-item btn btn-square" type="radio" name="options" aria-label="1" checked="checked"
+            hx-get="/paging/1" hx-target="#item-list" hx-swap="innerHTML" hx-indicator="#loading" />
+        <input class="join-item btn btn-square" type="radio" name="options" aria-label="2" hx-get="/paging/2"
+            hx-target="#item-list" hx-swap="innerHTML" hx-indicator="#loading" />
+        <input class="join-item btn btn-square" type="radio" name="options" aria-label="3" hx-get="/paging/3"
+            hx-target="#item-list" hx-swap="innerHTML" hx-indicator="#loading" />
+        <input class="join-item btn btn-square" type="radio" name="options" aria-label="4" hx-get="/paging/4"
+            hx-target="#item-list" hx-swap="innerHTML" hx-indicator="#loading" />
+    </div>
+</div>
+</div>
+</div>

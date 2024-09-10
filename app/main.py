@@ -1,4 +1,5 @@
 from typing import Annotated
+from time import sleep
 
 from fastapi import FastAPI, Request, Response, Form, Depends
 from fastapi.staticfiles import StaticFiles
@@ -9,6 +10,7 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+# Fake persistence
 current_user = None
 item_list = []
 
@@ -84,7 +86,7 @@ async def home(request: Request, dependencies=Depends(loggedInCookieRequired)):
 
 
 @app.get("/echo", response_class=HTMLResponse)
-async def echo(shout: str = "Silence..."):
+async def echo(shout: str):
     return HTMLResponse(content=shout if shout else "Silence...", status_code=200)
 
 # List example
@@ -97,7 +99,7 @@ async def list(request: Request):
 
 
 @app.post("/item", response_class=templates.TemplateResponse)
-async def add_item(request: Request, item: Annotated[str, Form()]):
+async def add_item(request: Request, item: Annotated[str, Form()], dependencies=Depends(loggedInCookieRequired)):
     global item_list
     item_list.append(item)
     return templates.TemplateResponse(
@@ -106,9 +108,31 @@ async def add_item(request: Request, item: Annotated[str, Form()]):
 
 
 @app.delete("/item/{item_id}", response_class=templates.TemplateResponse)
-async def delete_item(request: Request, item_id: int):
+async def delete_item(request: Request, item_id: int, dependencies=Depends(loggedInCookieRequired)):
     global item_list
     del item_list[item_id - 1]
     return templates.TemplateResponse(
         request=request, name="item_list.html.jinja", context={"item_list": item_list}
     )
+
+
+# Paging example
+# List example
+@app.get("/paging", response_class=templates.TemplateResponse)
+async def list(request: Request):
+    item_list = [f"Item {i}" for i in range(10, 21)]
+    return templates.TemplateResponse(
+        request=request, name="paging.html.jinja", context={"item_list": item_list}
+    )
+
+
+
+@app.get("/paging/{page}", response_class=templates.TemplateResponse)
+async def list(request: Request, page: int):
+    sleep(1)
+    offset = page * 10
+    item_list = [f"Item {i}" for i in range(1 + offset, 11 + offset)]
+    return templates.TemplateResponse(
+        request=request, name="page.html.jinja", context={"item_list": item_list}
+    )
+
