@@ -6,6 +6,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse, HTMLResponse
 
+from .plot import myplot
+
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
@@ -16,7 +18,7 @@ item_list = []
 
 
 # Login Screen
-@app.get("/login", response_class=templates.TemplateResponse)
+@app.get("/login", response_class=HTMLResponse)
 def login(request: Request):
     return templates.TemplateResponse(request=request, name="login.html.jinja")
 
@@ -68,7 +70,7 @@ async def logout_user():
 
 
 # Home Screen
-@app.get("/", response_class=templates.TemplateResponse)
+@app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
     global current_user
     return templates.TemplateResponse(
@@ -76,12 +78,12 @@ async def read_root(request: Request):
     )
 
 
-@app.get("/home", response_class=templates.TemplateResponse)
+@app.get("/home", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse(request=request, name="home.html.jinja")
 
 
-@app.get("/secured_home", response_class=templates.TemplateResponse)
+@app.get("/secured_home", response_class=HTMLResponse)
 async def home(request: Request, dependencies=Depends(loggedInCookieRequired)):
     return templates.TemplateResponse(request=request, name="home.html.jinja")
 
@@ -90,8 +92,9 @@ async def home(request: Request, dependencies=Depends(loggedInCookieRequired)):
 async def echo(shout: str):
     return HTMLResponse(content=shout if shout else "Silence...", status_code=200)
 
+
 # List example
-@app.get("/list", response_class=templates.TemplateResponse)
+@app.get("/list", response_class=HTMLResponse)
 async def list(request: Request):
     global item_list
     return templates.TemplateResponse(
@@ -99,8 +102,12 @@ async def list(request: Request):
     )
 
 
-@app.post("/item", response_class=templates.TemplateResponse)
-async def add_item(request: Request, item: Annotated[str, Form()], dependencies=Depends(loggedInCookieRequired)):
+@app.post("/item", response_class=HTMLResponse)
+async def add_item(
+    request: Request,
+    item: Annotated[str, Form()],
+    dependencies=Depends(loggedInCookieRequired),
+):
     global item_list
     item_list.append(item)
     return templates.TemplateResponse(
@@ -108,8 +115,10 @@ async def add_item(request: Request, item: Annotated[str, Form()], dependencies=
     )
 
 
-@app.delete("/item/{item_id}", response_class=templates.TemplateResponse)
-async def delete_item(request: Request, item_id: int, dependencies=Depends(loggedInCookieRequired)):
+@app.delete("/item/{item_id}", response_class=HTMLResponse)
+async def delete_item(
+    request: Request, item_id: int, dependencies=Depends(loggedInCookieRequired)
+):
     global item_list
     del item_list[item_id - 1]
     return templates.TemplateResponse(
@@ -118,7 +127,7 @@ async def delete_item(request: Request, item_id: int, dependencies=Depends(logge
 
 
 # Paging example with delay
-@app.get("/paging", response_class=templates.TemplateResponse)
+@app.get("/paging", response_class=HTMLResponse)
 async def list(request: Request):
     item_list = [f"Item {i}" for i in range(1, 11)]
     return templates.TemplateResponse(
@@ -126,8 +135,7 @@ async def list(request: Request):
     )
 
 
-
-@app.get("/paging/{page}", response_class=templates.TemplateResponse)
+@app.get("/paging/{page}", response_class=HTMLResponse)
 async def list(request: Request, page: int):
     sleep(1)
     offset = page * 10
@@ -136,3 +144,32 @@ async def list(request: Request, page: int):
         request=request, name="page.html.jinja", context={"item_list": item_list}
     )
 
+
+# Plot example
+@app.get("/plot", response_class=HTMLResponse)
+async def plot(request: Request):
+    plot = myplot(1, 1, 1, 2, 0, 0)
+    return templates.TemplateResponse(
+        request=request, name="plot.html.jinja", context={"plot": plot}
+    )
+
+
+@app.get("/plot_internal", response_class=HTMLResponse)
+async def plot_internal(
+    amp1: Annotated[float, Form] = 1,
+    amp2: Annotated[float, Form] = 1,
+    freq1: Annotated[float, Form] = 1,
+    freq2: Annotated[float, Form] = 2,
+    phase1: Annotated[float, Form] = 0,
+    phase2: Annotated[float, Form] = 0,
+):
+    PRE = '<img id="plot-swap" src="data:image/png;base64, '
+    POST = '">'
+    return HTMLResponse(
+        content=PRE
+        + myplot(
+            amp1=amp1, amp2=amp2, freq1=freq1, freq2=freq2, phase1=phase1, phase2=phase2
+        )
+        + POST,
+        status_code=200,
+    )
