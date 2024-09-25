@@ -23,6 +23,7 @@ def myplot(amp1, amp2, freq1, freq2, phase1, phase2) -> bytes:
     # plt.show()
     my_stringIObytes = BytesIO()
     plt.savefig(my_stringIObytes, format='jpg')
+    plt.close()
     my_stringIObytes.seek(0)
     return base64.b64encode(my_stringIObytes.read()).decode()
 

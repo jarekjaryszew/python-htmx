@@ -1,6 +1,6 @@
 <div class="flex justify-center">
     <div class=" w-1/2 rounded-box">
-        {# form with sliders#}
+        <img id="plot-swap" src="data:image/png;base64, {{plot}}" alt="Red dot" />
         <form hx-trigger="change" hx-get="/plot_internal" hx-target="#plot-swap" 
         hx-swap="outerHTML">
             <div class="form-control">
@@ -17,6 +17,5 @@
                 <label class="label">PHASE 2</label>
                 <input type="range" min="0" max="3" value="1" class="slider"  name="phase2" step="0.1">
             </div>
-            <img id="plot-swap" src="data:image/png;base64, {{plot}}" alt="Red dot" />
     </div>
 </div>
